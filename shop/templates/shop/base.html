@@ -1,46 +1,26 @@
+{% load static %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{% block title %}Ecom Site{% endblock %}</title>
+    <title>{% block title %}Shop{% endblock %}</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.6/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="{% static 'shop/style.css' %}">
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
 </head>
 <body>
-   <nav class="navbar navbar-expand-lg navbar-light bg-light">
-    <div class="container-fluid">
-        <a class="navbar-brand" href="#">Navbar</a>
-        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
-            <span class="navbar-toggler-icon"></span>
-        </button>
-        <div class="collapse navbar-collapse" id="navbarNav">
+    <nav class="navbar navbar-expand-lg bg-body-tertiary">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="#">Shop</a>
             <ul class="navbar-nav">
                 <li class="nav-item"><a class="nav-link" href="#">Home</a></li>
-                <li class="nav-item"><a class="nav-link" href="#">Features</a></li>
-                <li class="nav-item"><a id="cart" class="nav-link" href="#">Cart(0)</a></li>
+                <li class="nav-item"><a class="nav-link" href="#">Cart(<span id="cart">0</span>)</a></li>
             </ul>
         </div>
-    </div>
-</nav>
-<div class="container mt-4">
-    {% block content %}{% endblock %}
-</div>
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.6/dist/js/bootstrap.bundle.min.js"></script>
-<script>
-    let cart = {};
-    if (localStorage.getItem('cart')) {
-        cart = JSON.parse(localStorage.getItem('cart'));
-    }
+    </nav>
 
-    document.addEventListener("click", function (e) {
-        if (e.target.classList.contains('atc')) {
-            const item_id = e.target.id.toString();
-            cart[item_id] = cart[item_id] ? cart[item_id] + 1 : 1;
-            localStorage.setItem('cart', JSON.stringify(cart));
-            document.getElementById("cart").innerHTML = "Cart(" + Object.keys(cart).length + ")";
-        }
-    });
-</script>
+    <div class="container mt-4">
+        {% block content %}{% endblock %}
+    </div>
 </body>
 </html>

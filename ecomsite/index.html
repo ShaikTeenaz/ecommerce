@@ -44,11 +44,11 @@
     </nav>
 
     <div class="container mt-4">
-       {% extends "shop/base.html" %}
+{% extends "shop/base.html" %}
+
 {% block title %}Home{% endblock %}
 
 {% block content %}
-<!-- 🔍 Search Form -->
 <form class="card card-sm mb-4" method="get">
     <div class="card-body row align-items-center">
         <div class="col">
@@ -59,11 +59,12 @@
         </div>
     </div>
 </form>
-        <div class="row">
+
+<div class="row">
     {% for product in product_objects %}
     <div class="col-md-3 mb-4">
         <div class="card h-100">
-            <img src="{{ product.image }}" class="card-img-top" style="height:300px;">
+            <img src="{{ product.image.url }}" class="card-img-top" style="height:300px;">
             <div class="card-body">
                 <h5 class="card-title">{{ product.title }}</h5>
                 <p class="card-text">₹{{ product.price }}</p>
@@ -75,24 +76,18 @@
     {% endfor %}
 </div>
 
-   <!-- 📄 Pagination -->
 <div class="row">
     <div class="col-md-6 offset-md-3">
         <ul class="pagination justify-content-center">
             {% if product_objects.has_previous %}
-            <li class="page-item">
-                <a class="page-link" href="?page={{ product_objects.previous_page_number }}">Previous</a>
-            </li>
+            <li class="page-item"><a class="page-link" href="?page={{ product_objects.previous_page_number }}">Previous</a></li>
             {% endif %}
             {% if product_objects.has_next %}
-            <li class="page-item">
-                <a class="page-link" href="?page={{ product_objects.next_page_number }}">Next</a>
-            </li>
+            <li class="page-item"><a class="page-link" href="?page={{ product_objects.next_page_number }}">Next</a></li>
             {% endif %}
         </ul>
     </div>
 </div>
-{% endblock %}
 
 <script type="text/javascript">
     let cart = {};
@@ -101,19 +96,15 @@
     }
 
     $(document).on('click', '.atc', function () {
-        console.log("The add to cart button is clicked");
         var item_id = this.id.toString();
-        console.log(item_id);
-
         if (cart[item_id] !== undefined) {
-            cart[item_id] = cart[item_id] + 1;
+            cart[item_id] += 1;
         } else {
             cart[item_id] = 1;
         }
-
-        console.log(cart);
         localStorage.setItem('cart', JSON.stringify(cart));
-        document.getElementById("cart").innerHTML = "Cart(" + Object.keys(cart).length + ")";
+        document.getElementById("cart").innerHTML = Object.keys(cart).length;
     });
 </script>
+{% endblock %}
 </html>
