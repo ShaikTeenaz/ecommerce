@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.6/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-4Q6Gf2aSP4eDXB8Miphtr37CMZZQ5oXLH2yaXMJ2w8e2ZtHTl7GptT4jmndRuHDT" crossorigin="anonymous">
+    <link rel="stylesheet" href="{% static 'shop/style.css' %}">
+    
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg bg-body-tertiary">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="#">Navbar</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav">
+                    <li class="nav-item"><a class="nav-link" href="#">Home</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#">Features</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#">Cart(0)</a></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+    <div class="container mt-4">
+        {% block content %}{% endblock %}
+    </div>
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="#">Navbar</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav">
+                    <li class="nav-item"><a class="nav-link" href="#">Home</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#">Features</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#">Cart(0)</a></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container mt-4">
+       {% extends "shop/base.html" %}
+{% block title %}Home{% endblock %}
+
+{% block content %}
+<!-- 🔍 Search Form -->
+<form class="card card-sm mb-4" method="get">
+    <div class="card-body row align-items-center">
+        <div class="col">
+            <input type="search" name="item_name" placeholder="Search for Products" class="form-control">
+        </div>
+        <div class="col-auto">
+            <button class="btn btn-success" type="submit">Search</button>
+        </div>
+    </div>
+</form>
+        <div class="row">
+    {% for product in product_objects %}
+    <div class="col-md-3 mb-4">
+        <div class="card h-100">
+            <img src="{{ product.image }}" class="card-img-top" style="height:300px;">
+            <div class="card-body">
+                <h5 class="card-title">{{ product.title }}</h5>
+                <p class="card-text">₹{{ product.price }}</p>
+                <a href="/{{ product.id }}" class="btn btn-warning">View</a>
+                <button id="{{ product.id }}" class="btn btn-warning atc">Add to cart</button>
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+
+   <!-- 📄 Pagination -->
+<div class="row">
+    <div class="col-md-6 offset-md-3">
+        <ul class="pagination justify-content-center">
+            {% if product_objects.has_previous %}
+            <li class="page-item">
+                <a class="page-link" href="?page={{ product_objects.previous_page_number }}">Previous</a>
+            </li>
+            {% endif %}
+            {% if product_objects.has_next %}
+            <li class="page-item">
+                <a class="page-link" href="?page={{ product_objects.next_page_number }}">Next</a>
+            </li>
+            {% endif %}
+        </ul>
+    </div>
+</div>
+{% endblock %}
+
+<script type="text/javascript">
+    let cart = {};
+    if (localStorage.getItem('cart') !== null) {
+        cart = JSON.parse(localStorage.getItem('cart'));
+    }
+
+    $(document).on('click', '.atc', function () {
+        console.log("The add to cart button is clicked");
+        var item_id = this.id.toString();
+        console.log(item_id);
+
+        if (cart[item_id] !== undefined) {
+            cart[item_id] = cart[item_id] + 1;
+        } else {
+            cart[item_id] = 1;
+        }
+
+        console.log(cart);
+        localStorage.setItem('cart', JSON.stringify(cart));
+        document.getElementById("cart").innerHTML = "Cart(" + Object.keys(cart).length + ")";
+    });
+</script>
+</html>
